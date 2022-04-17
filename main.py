@@ -2,11 +2,22 @@ import math
 from scipy import stats
 from scipy.stats import norm
 
-def call (s, k, r, t, vol):
-    # s = stock price, k = strike price, r = risk free rate in %, t = years to expiry, vol = annual volatility in %
+def main():
+    # s = stock price, k = strike price, r = interest rate in %, t = years to expiry, vol annual volatility in %
     # after asking for risk free rate, divide by 100
     # after asking for days, convert to time in years
+    
+    s = float(input("Stock spot price: "));
+    k = float(input("Strike price: "));
+    r = float(input("Risk free rate (%): "));
+    t = float(input("Days to expiry: "));
+    vol = float(input("Volatility: "));
 
+    put(s, k, r/100, t/365, vol/100);
+
+def call (s, k, r, t, vol):
+    # s = stock price, k = strike price, r = risk free rate in %, t = years to expiry, vol = annual volatility in %
+    
     # calculate d1 and d2
     d1 = (math.log(s/k) + (r + (vol**2)/2) * t) / (vol * math.sqrt(t));
     d2 = d1 - vol * math.sqrt(t);
@@ -19,8 +30,6 @@ def put (s, k, r, t, vol):
     p = 0;
 
     # s = stock price, k = strike price, r = risk free rate in %, t = years to expiry, vol = annual volatility in %
-    # after asking for risk free rate, divide by 100
-    # after asking for days, convert to time in years
 
     # calculate d1 and d2
     d1 = (math.log(s/k) + (r + (vol**2)/2) * t) / (vol * math.sqrt(t));
@@ -30,7 +39,7 @@ def put (s, k, r, t, vol):
     print(p);
     return p;
 
-# unused for now
+# unused
 def cdf(d):
     # to fix
     # N = math.erf(d / math.sqrt(2.0));
@@ -38,5 +47,4 @@ def cdf(d):
     return stats.norm.cdf(d);
     # return N;
 
-# s = stock price, k = strike price, r = interest rate in %, t = years to expiry, vol annual volatility in %
-put(100, 100, 0.0033, 0.1, 0.25);
+main();
