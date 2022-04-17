@@ -3,28 +3,32 @@ from scipy import stats
 from scipy.stats import norm
 
 def call (s, k, r, t, vol):
-    # initalizing c as 0 as a test
-    c = 0;
+    # s = stock price, k = strike price, r = risk free rate in %, t = years to expiry, vol = annual volatility in %
+    # after asking for risk free rate, divide by 100
+    # after asking for days, convert to time in years
+
+    # calculate d1 and d2
+    d1 = (math.log(s/k) + (r + (vol**2)/2) * t) / (vol * math.sqrt(t));
+    d2 = d1 - vol * math.sqrt(t);
+    c = norm.cdf(d1) * s - norm.cdf(d2) * k * math.exp(-r*t);
+    print(c);
+    return c;
+
+def put (s, k, r, t, vol):
+    # initialize p as a test
+    p = 0;
 
     # s = stock price, k = strike price, r = risk free rate in %, t = years to expiry, vol = annual volatility in %
-
-    # giving test values for variables
-    s = 100;
-    k = 100;
-    r = 0.0033;
-    t = 0.1;    # after asking for days, convert to time in years
-    vol = 0.25;
+    # after asking for risk free rate, divide by 100
+    # after asking for days, convert to time in years
 
     # calculate d1 and d2
     d1 = (math.log(s/k) + (r + (vol**2)/2) * t) / (vol * math.sqrt(t));
     d2 = d1 - vol * math.sqrt(t);
 
-    c = norm.cdf(d1) * s - norm.cdf(d2) * k * math.exp(-r*t);
-    # c = 51.6 - 48.4 * math.exp(-r*t);
-    print(d1);
-    print(d2);
-    print(c);
-    return c;
+    p = norm.cdf(-d2) * k * math.exp(-r*t) - norm.cdf(-d1) * s;
+    print(p);
+    return p;
 
 # unused for now
 def cdf(d):
@@ -35,4 +39,4 @@ def cdf(d):
     # return N;
 
 # s = stock price, k = strike price, r = interest rate in %, t = years to expiry, vol annual volatility in %
-call(100, 100, 0.33, 0.1, 0.25);
+put(100, 100, 0.0033, 0.1, 0.25);
